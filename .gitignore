@@ -6,3 +6,6 @@ build/
 .idea/
 *.iml
 
+
+# os files
+.DS_Store

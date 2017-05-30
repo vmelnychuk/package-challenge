@@ -2,7 +2,7 @@
 
 ```shell
 ./gradlew clean build
-java -jar build/libs/package-challenge.jar
+java -jar build/libs/package-challenge.jar input-exmple.txt
 ```
 
 ## Package
@@ -18,5 +18,3 @@ package
 The package has a `weight limit`.
 Your goal is to determine which things to put into the package so that the
 total weight is less than or equal to the package limit and the total cost is as large as possible.
-
-we
