@@ -1,0 +1,28 @@
+group 'io.neko'
+version '0.0.1-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = sourceCompatibility
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    archiveName = 'package-challenge.jar'
+    version = 'package-challenge' + new Date().format("-yyyyMMddHHmmss").toString()
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'io.neko.challenge.Main'
+        )
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
