@@ -11,8 +11,8 @@ public class PackageTest {
 
     @Test
     public void showContentOfEmptyPackage() throws Exception {
-        int weight = 10;
-        PackageBean pack = new PackageBean(weight);
+        int limit = 10;
+        PackageBean pack = new PackageBean(limit, null);
 
         String result = pack.showContent();
 
@@ -21,9 +21,9 @@ public class PackageTest {
 
     @Test(expected = APIException.class)
     public void tooHeavyPackage() throws Exception {
-        int weight = PackageBean.MAX_WEIGHT + 1;
+        int limit = PackageBean.MAX_WEIGHT + 1;
 
-        PackageBean pack = new PackageBean(weight);
+        PackageBean pack = new PackageBean(limit, null);
     }
 
 }

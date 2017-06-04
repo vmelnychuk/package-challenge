@@ -12,8 +12,9 @@ public class Packer {
         List<String> packsLines = InputFileParser.splitInputFileToLines(path);
 
         List<PackageBean> packages = new ArrayList<>();
+        PackageParser packageParser = new PackageParser();
         for (String packLine : packsLines) {
-            packages.add(PackageParser.parsePackage(packLine));
+            packages.add(packageParser.parsePackage(packLine));
         }
 
         StringBuilder result = new StringBuilder();
