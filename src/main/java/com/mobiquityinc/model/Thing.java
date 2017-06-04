@@ -1,7 +1,5 @@
 package com.mobiquityinc.model;
 
-import com.mobiquityinc.exception.APIException;
-
 import java.util.Objects;
 
 public class Thing {

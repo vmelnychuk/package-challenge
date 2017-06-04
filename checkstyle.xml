@@ -18,9 +18,6 @@
 
     <module name="TreeWalker">
 
-        <!-- Do not use imports with star (e.g., javax.persistence.*) -->
-        <module name="AvoidStarImport"/>
-
         <!-- Imports from the same package -->
         <module name="RedundantImport"/>
 
