@@ -1,5 +1,7 @@
 package com.mobiquityinc.model;
 
+import java.util.Arrays;
+
 public class SolutionHolder {
     private int cost;
     private double weight;
@@ -8,7 +10,7 @@ public class SolutionHolder {
     public SolutionHolder(int cost, double weight, int[] solution) {
         this.cost = cost;
         this.weight = weight;
-        this.solution = solution;
+        this.solution = Arrays.copyOf(solution, solution.length);
     }
 
     public int getCost() {
@@ -28,10 +30,10 @@ public class SolutionHolder {
     }
 
     public int[] getSolution() {
-        return solution;
+        return Arrays.copyOf(solution, solution.length);
     }
 
     public void setSolution(int[] solution) {
-        this.solution = solution;
+        this.solution = Arrays.copyOf(solution, solution.length);
     }
 }

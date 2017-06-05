@@ -3,6 +3,7 @@ version '0.0.1-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -26,6 +27,13 @@ jar {
 checkstyle {
     toolVersion = checkstyleVersion
     configFile = rootProject.file('checkstyle.xml')
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
 
 dependencies {

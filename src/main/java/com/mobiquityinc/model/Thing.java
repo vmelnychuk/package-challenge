@@ -47,9 +47,9 @@ public class Thing {
         if (o == null || getClass() != o.getClass()) return false;
         Thing thing = (Thing) o;
         return index == thing.index &&
-        Double.compare(thing.weight, weight) == 0 &&
-        cost == thing.cost &&
-        Objects.equals(currency, thing.currency);
+                Double.compare(thing.weight, weight) == 0 &&
+                cost == thing.cost &&
+                Objects.equals(currency, thing.currency);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Thing {
 
         if (thing.getWeight() < MIN_WEIGHT || thing.getWeight() > MAX_WEIGHT) {
             throw new APIException(
-                String.format("The item weight:[%d] is incorrect", thing.getWeight()));
+                String.format("The item weight:[%f] is incorrect", thing.getWeight()));
         }
     }
 }
