@@ -2,7 +2,7 @@
 
 ```shell
 ./gradlew clean build
-java -jar build/libs/package-challenge.jar input-exmple.txt
+java -jar build/libs/package-challenge.jar input-example.txt
 ```
 
 ## Package
