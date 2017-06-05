@@ -13,7 +13,7 @@ public class PackageBean {
     private final List<Thing> allThings;
     private final SolutionGenerator solutionGenerator;
     private final SortedMap<Integer, int[]> possibleSolutionsCost;
-    private final SortedMap<Integer, int[]> possibleSolutionsWeight;
+    private final SortedMap<Double, int[]> possibleSolutionsWeight;
 
 
     public PackageBean(int limit, List<Thing> allThings) {
@@ -74,7 +74,7 @@ public class PackageBean {
         }
 
         this.possibleSolutionsCost.put(0, new int [allThings.size()]);
-        this.possibleSolutionsWeight.put(0, new int [allThings.size()]);
+        this.possibleSolutionsWeight.put(0.0, new int [allThings.size()]);
     }
 
     public void checkSolutions(int[][] solutions) {
@@ -93,10 +93,15 @@ public class PackageBean {
         }
         if (totalWeight <= limit) {
             int currentMaxCost = possibleSolutionsCost.lastKey();
-            int currentMaxWeight = possibleSolutionsWeight.lastKey();
-            if (currentMaxCost < totalCost) {
-                possibleSolutionsCost.remove(currentMaxCost);
+            double currentMaxWeight = possibleSolutionsWeight.lastKey();
+            if (currentMaxCost <= totalCost) {
+                if ((currentMaxCost / currentMaxWeight) < (totalCost / totalWeight)) {
+                    possibleSolutionsCost.remove(currentMaxCost);
+                }
                 possibleSolutionsCost.put(totalCost, solution);
+
+                possibleSolutionsWeight.remove(currentMaxWeight);
+                possibleSolutionsWeight.put(totalWeight, solution);
             }
         }
     }
