@@ -1,5 +1,7 @@
 package com.mobiquityinc.model;
 
+import com.mobiquityinc.exception.APIException;
+
 import java.util.*;
 
 public class PackageBean {
@@ -7,6 +9,7 @@ public class PackageBean {
     public static final String INDEX_DELIMITER = ",";
     public static final int MAX_WEIGHT = 100;
     public static final int MIN_WEIGHT = 1;
+    public static final int MAX_THING_COUNT = 15;
 
     private final int limit;
     private List<Thing> packedThings;
@@ -23,6 +26,8 @@ public class PackageBean {
         this.solutionGenerator = new SolutionGenerator();
         this.possibleSolutionsCost = new TreeMap<>();
         this.possibleSolutionsWeight = new TreeMap<>();
+
+        validate(this);
     }
 
     public int getLimit() {
@@ -103,6 +108,21 @@ public class PackageBean {
                 possibleSolutionsWeight.remove(currentMaxWeight);
                 possibleSolutionsWeight.put(totalWeight, solution);
             }
+        }
+    }
+
+    public static void validate(PackageBean packageBean) {
+        if (packageBean.getAllThings().size() > MAX_THING_COUNT) {
+            throw new APIException(
+            String.format("There are too long list of items:[%d]",
+            packageBean.getAllThings().size()));
+        }
+
+        if (packageBean.getLimit() < MIN_WEIGHT
+                || packageBean.getLimit() > MAX_WEIGHT) {
+            throw new APIException(
+                String.format("The weight of pack:[%d] is incorrect",
+                packageBean.getLimit()));
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.mobiquityinc.model;
 
+import com.mobiquityinc.exception.APIException;
+
 import java.util.Objects;
 
 public class Thing {
@@ -19,6 +21,8 @@ public class Thing {
         this.weight = weight;
         this.cost = cost;
         this.currency = currency;
+
+        validate(this);
     }
 
     public int getIndex() {
@@ -51,5 +55,17 @@ public class Thing {
     @Override
     public int hashCode() {
         return Objects.hash(index, weight, cost, currency);
+    }
+
+    public static void validate(Thing thing) {
+        if (thing.getCost() < MIN_COST || thing.getCost() > MAX_COST) {
+            throw new APIException(
+                String.format("The item cost:[%d] is incorrect", thing.getCost()));
+        }
+
+        if (thing.getWeight() < MIN_WEIGHT || thing.getWeight() > MAX_WEIGHT) {
+            throw new APIException(
+                String.format("The item weight:[%d] is incorrect", thing.getWeight()));
+        }
     }
 }
