@@ -15,8 +15,7 @@ public class PackageBean {
     private List<Thing> packedThings;
     private final List<Thing> allThings;
     private final SolutionGenerator solutionGenerator;
-    private final SortedMap<Integer, int[]> possibleSolutionsCost;
-    private final SortedMap<Double, int[]> possibleSolutionsWeight;
+    private SolutionHolder possibleSolution;
 
 
     public PackageBean(int limit, List<Thing> allThings) {
@@ -24,9 +23,6 @@ public class PackageBean {
         this.allThings = allThings;
         this.packedThings = new ArrayList<>();
         this.solutionGenerator = new SolutionGenerator();
-        this.possibleSolutionsCost = new TreeMap<>();
-        this.possibleSolutionsWeight = new TreeMap<>();
-
         validate(this);
     }
 
@@ -60,8 +56,7 @@ public class PackageBean {
         int[][] solutions = solutionGenerator.generate(allThings.size());
         checkSolutions(solutions);
 
-        Integer solutionKey = possibleSolutionsCost.lastKey();
-        int[] solution = possibleSolutionsCost.get(solutionKey);
+        int[] solution = possibleSolution.getSolution();
 
         for (int i = 0; i < allThings.size(); i++) {
             if (solution[i] == 1) {
@@ -77,9 +72,7 @@ public class PackageBean {
                 iterator.remove();
             }
         }
-
-        this.possibleSolutionsCost.put(0, new int [allThings.size()]);
-        this.possibleSolutionsWeight.put(0.0, new int [allThings.size()]);
+        this.possibleSolution = new SolutionHolder(0, 0.01, new int [allThings.size()]);
     }
 
     public void checkSolutions(int[][] solutions) {
@@ -97,16 +90,14 @@ public class PackageBean {
             totalCost += solution[i] * thing.getCost();
         }
         if (totalWeight <= limit) {
-            int currentMaxCost = possibleSolutionsCost.lastKey();
-            double currentMaxWeight = possibleSolutionsWeight.lastKey();
+            int currentMaxCost = possibleSolution.getCost();
+            double currentMaxWeight = possibleSolution.getWeight();
             if (currentMaxCost <= totalCost) {
-                if ((currentMaxCost / currentMaxWeight) < (totalCost / totalWeight)) {
-                    possibleSolutionsCost.remove(currentMaxCost);
+                if ((currentMaxCost / currentMaxWeight) <= (totalCost / totalWeight)) {
+                    possibleSolution.setCost(totalCost);
+                    possibleSolution.setWeight(totalWeight);
+                    possibleSolution.setSolution(solution);
                 }
-                possibleSolutionsCost.put(totalCost, solution);
-
-                possibleSolutionsWeight.remove(currentMaxWeight);
-                possibleSolutionsWeight.put(totalWeight, solution);
             }
         }
     }

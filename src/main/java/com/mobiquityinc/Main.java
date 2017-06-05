@@ -7,9 +7,6 @@ public class Main {
     public static void main(String[] args) {
         InputFileValidator inputFileValidator = new InputFileValidator();
 
-        // for IDEA run
-        args = new String[] {"/tmp/input-example.txt"};
-
         if (!inputFileValidator.inputFileIsValid(args)) {
             printUsage();
         }
