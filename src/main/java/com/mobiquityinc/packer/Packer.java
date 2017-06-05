@@ -17,6 +17,10 @@ public class Packer {
             packages.add(packageParser.parsePackage(packLine));
         }
 
+        for (PackageBean packageBean : packages) {
+            packageBean.pack();
+        }
+
         StringBuilder result = new StringBuilder();
         for (PackageBean packageBean : packages) {
             result.append(packageBean.showContent());

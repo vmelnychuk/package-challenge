@@ -1,8 +1,6 @@
 package com.mobiquityinc.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class PackageBean {
     public static final String EMPTY_PACKAGE_MARK = "-";
@@ -13,12 +11,18 @@ public class PackageBean {
     private final int limit;
     private List<Thing> packedThings;
     private final List<Thing> allThings;
+    private final SolutionGenerator solutionGenerator;
+    private final SortedMap<Integer, int[]> possibleSolutionsCost;
+    private final SortedMap<Integer, int[]> possibleSolutionsWeight;
 
 
     public PackageBean(int limit, List<Thing> allThings) {
         this.limit = limit;
         this.allThings = allThings;
-        packedThings = new ArrayList<>();
+        this.packedThings = new ArrayList<>();
+        this.solutionGenerator = new SolutionGenerator();
+        this.possibleSolutionsCost = new TreeMap<>();
+        this.possibleSolutionsWeight = new TreeMap<>();
     }
 
     public int getLimit() {
@@ -40,5 +44,60 @@ public class PackageBean {
         }
 
         return joiner.toString();
+    }
+
+    public void pack() {
+        deleteTooHeavyItems();
+        packOtherThings();
+    }
+
+    public void packOtherThings() {
+        int[][] solutions = solutionGenerator.generate(allThings.size());
+        checkSolutions(solutions);
+
+        Integer solutionKey = possibleSolutionsCost.lastKey();
+        int[] solution = possibleSolutionsCost.get(solutionKey);
+
+        for (int i = 0; i < allThings.size(); i++) {
+            if (solution[i] == 1) {
+                packedThings.add(allThings.get(i));
+            }
+        }
+    }
+
+    public void deleteTooHeavyItems() {
+        for (Iterator<Thing> iterator = allThings.iterator(); iterator.hasNext(); ) {
+            Thing thing = iterator.next();
+            if (thing.getWeight() > this.getLimit()) {
+                iterator.remove();
+            }
+        }
+
+        this.possibleSolutionsCost.put(0, new int [allThings.size()]);
+        this.possibleSolutionsWeight.put(0, new int [allThings.size()]);
+    }
+
+    public void checkSolutions(int[][] solutions) {
+        for (int[] solution : solutions) {
+            checkSolution(solution);
+        }
+    }
+
+    public void checkSolution(int[] solution) {
+        double totalWeight = 0;
+        int totalCost = 0;
+        for (int i = 0; i < solution.length; i++) {
+            Thing thing = allThings.get(i);
+            totalWeight += solution[i] * thing.getWeight();
+            totalCost += solution[i] * thing.getCost();
+        }
+        if (totalWeight <= limit) {
+            int currentMaxCost = possibleSolutionsCost.lastKey();
+            int currentMaxWeight = possibleSolutionsWeight.lastKey();
+            if (currentMaxCost < totalCost) {
+                possibleSolutionsCost.remove(currentMaxCost);
+                possibleSolutionsCost.put(totalCost, solution);
+            }
+        }
     }
 }
